@@ -25,7 +25,7 @@ function carteDetail(tableau){
   let elementMain = document.getElementById("detailOurs");
   elementMain.appendChild(nouvelleDiv);
   nouvelleDiv.classList.add("col-lg-6");
-  nouvelleDiv.innerHTML="<div class=\"card mb-4 mb-lg-0 border-primary shadow\"><img class=\"card-img-top\" src=\"" + tableau.imageUrl + "\" alt=\"Ours" + tableau.name + "><div class=\"card-body\"><h5 class=\"card-title\">" + tableau.name + " " + new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(tableau.price/100) + "</h5><p class=\"card-text\">" + tableau.description + "</p><label for=\"choixCouleur\">Choix de couleur : </label><select name=\"choixCouleur\" id=\"colorChoice\"></select><a href=\"panier.html\" class=\"btn btn-primary\">Ajouter au panier</a></div></div>";
+  nouvelleDiv.innerHTML="<div class=\"card mb-4 mb-lg-0 border-primary shadow\"><img class=\"card-img-top\" src=\"" + tableau.imageUrl + "\" alt=\"Ours" + tableau.name + "><div class=\"card-body\"><h5 class=\"card-title\">" + tableau.name + " " + new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(tableau.price/100) + "</h5><p class=\"card-text\">" + tableau.description + "</p><label for=\"choixCouleur\">Choix de couleur : </label><select name=\"choixCouleur\" id=\"colorChoice\"></select><a href=\"panier.html?ours=" + tableau.name + "&prix=" + tableau.price + "&id=" + idOurs + " \" class=\"btn btn-primary\">Ajouter au panier</a></div></div>";
   let choixCouleur = document.getElementById("colorChoice");
   let listeCouleurs ="";
   for (let i in tableau.colors) {
