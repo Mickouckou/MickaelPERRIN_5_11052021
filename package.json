@@ -5,7 +5,7 @@
   "main": "webpack.config.js",
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "sass": "sass --watch ./scss/style.scss:./css/style.css",
     "build": "webpack"
   },
   "repository": {
@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Mickouckou/MickaelPERRIN_5_11052021#readme",
   "dependencies": {
+    "bootstrap": "^5.0.1",
     "webpack": "^5.37.0",
     "webpack-cli": "^4.7.0"
   }

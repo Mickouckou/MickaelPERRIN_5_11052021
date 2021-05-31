@@ -1,0 +1,71 @@
+@import "variable_overrides";
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+.header, .navbar-brand{
+    font-size: 1.3em;
+}
+
+a{
+    outline: none;
+    text-decoration: none;
+    color: #000000;
+    }
+
+ul{
+    list-style:none;
+    padding: 0px;
+    }
+
+.card-title, .card-text, .detailCouleur{
+    margin-left: 4%; margin-right: 4%;
+}
+
+.card-title{
+    margin-top: 15px;
+}
+.card-text, .detailCouleur{
+    margin-top: 10px;
+}
+.detailCouleur{
+    margin-bottom: 15px;
+}
+
+.cardIndex{
+    height: 460px;
+}
+
+.card-img-top{
+    height: 60%;
+    object-fit: cover;
+}
+
+#detOurs{
+    width:100%;
+    margin: auto;
+}
+
+#h1{
+    width:100%;
+    text-align: center;
+}
+
+#detailOurs{
+    display: flex;
+    justify-content: center;
+}
+
+table{
+    width:100%;
+}
+tr {
+    margin-right: 3%; margin-left: 3%;
+    width: 94%;
+}
+
+button{
+    margin-top: 15px;
+}
+
+.footer{
+    background: lighten($color: $primary, $amount: 35);
+}

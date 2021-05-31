@@ -1,27 +1,8 @@
-let nomOurs = obtenirParametre("ours");
-let prixOurs = obtenirParametre("prix");
-let idOurs = obtenirParametre("id");
-let indice;
+let indice, firstName, lastName, address, city, email, contact;
 let product_id = [];
 
-//Récupération des données en paramètre
-function obtenirParametre (sVar) {
-  return unescape(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + escape(sVar).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
-}
-
-indice = localStorage.length/3;
-
-//On stocke dans le localStorage les valeurs nomOurs, prixOurs et idOurs
-if (nomOurs != "" && prixOurs != ""){
-    localStorage.setItem('article'+indice, nomOurs);
-    localStorage.setItem('prix'+indice, prixOurs);
-    localStorage.setItem('id'+indice, idOurs);
-    //console.log("Ajout de l'article : " + nomOurs + " indice : " + indice);
-}
-
-
 //On affiche les éléments du panier
-indice = localStorage.length/3;
+indice = localStorage.length;
 const nouvelleDiv = document.createElement("div");
 let elementMain = document.getElementById("contenuPanier");
 elementMain.appendChild(nouvelleDiv);
@@ -30,29 +11,122 @@ let total = 0;
 //on teste si le panier est vide
 if (indice == 0){
     articlePanier += "Votre panier est vide";
-    //on désactive le bouton vider le panier
-    let videPanier = document.getElementById("videPanier");
-    videPanier.setAttribute('disabled', 'true');
+    //on désactive les boutons vider le panier et passer commande
+    desactiver("videPanier");
+    desactiver("commande");
     }
 else{
-    for (let i=0; i<indice; i++) {
-        let nomArticle = localStorage.getItem('article'+i);
-        let prixArticle = localStorage.getItem('prix'+i);
-        product_id.push(localStorage.getItem('id'+i));
-        articlePanier+="<tr><td>" + nomArticle + "</td><td>" + new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(prixArticle/100) +"</td></tr>";
-        total += parseInt(prixArticle);
+    let affichagePanier = JSON.parse(localStorage.getItem('panier'));
+    for (let i=0; i<affichagePanier.length; i++){
+        product_id.push(affichagePanier[i]);
+        i++;
+        articlePanier+="<tr><td>" + affichagePanier[i] + "</td><td>";
+        i++;
+        articlePanier+= new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(affichagePanier[i]/100) +"</td></tr>";
+        total += parseInt(affichagePanier[i]);
     }
 }
 articlePanier += "<tr><td colspan=\"2\"><strong>Total : " + new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(total/100) + "</strong></td></table>";
 nouvelleDiv.innerHTML= articlePanier;
 
-
 //Bouton pour vider le panier
 let videPanier = document.getElementById("videPanier");
 videPanier.addEventListener('click', function(event) {
-    event.stopPropagation();
     localStorage.clear();
     document.location.replace("panier.html");
 });
 
-console.log("longueur tableau id : " + product_id.length);
+//On écoute le clic sur le bouton passer commande
+let clicCommande = document.getElementById("commande");
+clicCommande.addEventListener('click', event => confirmationCommande(event), {
+});
+
+/*--------FONCTIONS----------*/
+//Désactive les boutons
+function desactiver(element){
+    let boutonDesactive = document.getElementById(element);
+    boutonDesactive.setAttribute('disabled', 'true');
+}
+
+//Validation des données
+function validation(inputId, regex, inputName, message){
+    let inputMessage = document.getElementById(inputId);
+    //On teste si la donnée est vide ou si le regex est respecté
+    if (inputName === "" || regex.test(inputName) === false) {
+        inputMessage.innerHTML = message;
+        return false;
+    //Si la donnée est remplie et respecte le regex    
+    } else {
+        inputMessage.innerHTML = "ok";
+    }
+}
+
+//Confirmation de commande
+function confirmationCommande(event) {     
+    event.preventDefault();     
+    let donneeValide = true;         
+    //Création de l'objet contact
+    contact = {         
+        firstName: document.getElementById('firstName').value,        
+        lastName: document.getElementById('lastName').value,        
+        address: document.getElementById('address').value,        
+        city: document.getElementById('city').value,        
+        email: document.getElementById('email').value    
+        }   
+    if (validation("prenomPasConforme", /^[A-Z][A-z' -éèàëêùä]+/, contact.firstName, "Une majuscule puis majuscule ou minuscule avec espace, tiret ou apostrophe.") === false) {
+        donneeValide = false;     
+        };     
+    if (validation("nomPasConforme", /^[A-Z][A-z' -éèàëêùä]+/, contact.lastName, "Une majuscule puis majuscule ou minuscule avec espace, tiret ou apostrophe.") === false) {
+        donneeValide = false;
+        };     
+    if (validation("adressePasConforme", /^[A-z0-9-'-\s]{2,100}$/, contact.address, "Veuillez renseigner votre adresse et respecter le format requis") === false) {
+        donneeValide = false;
+        };     
+    if (validation("villePasConforme", /^[A-Z][A-z' -éèàëêùä]+/, contact.city, "Une majuscule puis majuscule ou minuscule avec espace, tiret ou apostrophe.") === false) {
+        donneeValide = false;
+        }; 
+    if (validation("emailPasConforme", /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/, contact.email, "Veuillez renseigner votre email et respecter le format requis") === false) {
+        donneeValide = false;
+        };
+    if (donneeValide === true) {         
+        // Si toutes les donnÃ©es sont valides, stockage de l'objet "contact" dans le localStorage;         
+        localStorage.setItem("Contact", JSON.stringify(contact));
+        localStorage.setItem("Produits", JSON.stringify(product_id));               
+        contact = JSON.parse(localStorage.getItem("Contact"));
+        console.log(contact);
+        product_id = JSON.parse(localStorage.getItem("Produits"));
+        console.log(product_id);      
+        //Création d'un objet commande         
+        let commande = {
+            contact, 
+            product_id
+            }        
+        //Appel de la fonction qui permet l'envoi de la commande        
+        envoiDonnees(commande);     
+    }}
+
+function envoiDonnees(commande){
+    commande = JSON.stringify(commande);
+    fetch("http://localhost:3000/api/teddies/order", {
+	    method: "POST",
+	    headers: { 
+            'Accept': 'application/json', 
+            'Content-Type': 'application/json' 
+        },
+	    body: commande
+    })
+    .then(function(res) {
+        if (res.ok) {
+          return res.json();
+        }
+      })
+    .then(function(resultat) {
+         /* document
+            .getElementById("result")
+            .innerText = value.postData.text;*/
+        for (let i in resultat) {
+            console.log(resultat[i]);
+            }
+    })
+    .catch(error => alert("Erreur : " + error));
+}
