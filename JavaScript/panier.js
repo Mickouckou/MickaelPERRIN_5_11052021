@@ -93,9 +93,7 @@ function confirmationCommande(event) {
         localStorage.setItem("Contact", JSON.stringify(contact));
         localStorage.setItem("Produits", JSON.stringify(products));               
         contact = JSON.parse(localStorage.getItem("Contact"));
-        console.log(contact);
         products = JSON.parse(localStorage.getItem("Produits"));
-        console.log(products);      
         //Création d'un objet commande         
         let commande = {
             contact, 
