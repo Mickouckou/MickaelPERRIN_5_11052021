@@ -57,5 +57,5 @@ function affichageReponse (resultat){
         .getElementById("resume")
         .innerHTML = affichageResultat;
     console.log(resultat.contact.firstName);
-    //localStorage.clear();
+    localStorage.clear();
 }
