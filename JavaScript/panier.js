@@ -1,5 +1,5 @@
 let indice, firstName, lastName, address, city, email, contact;
-let product_id = [];
+let products = [];
 
 //On affiche les éléments du panier
 indice = localStorage.length;
@@ -18,7 +18,7 @@ if (indice == 0){
 else{
     let affichagePanier = JSON.parse(localStorage.getItem('panier'));
     for (let i=0; i<affichagePanier.length; i++){
-        product_id.push(affichagePanier[i]);
+        products.push(affichagePanier[i]);
         i++;
         articlePanier+="<tr><td>" + affichagePanier[i] + "</td><td>";
         i++;
@@ -73,16 +73,16 @@ function confirmationCommande(event) {
         city: document.getElementById('city').value,        
         email: document.getElementById('email').value    
         }   
-    if (validation("prenomPasConforme", /^[A-Z][A-z' -éèàëêùä]+/, contact.firstName, "Une majuscule puis majuscule ou minuscule avec espace, tiret ou apostrophe.") === false) {
+    if (validation("prenomPasConforme", /^[A-Z][A-Za-z' -]{3,30}/, contact.firstName, "Une majuscule puis majuscule ou minuscule (sans accent) avec espace, tiret ou apostrophe.") === false) {
         donneeValide = false;     
         };     
-    if (validation("nomPasConforme", /^[A-Z][A-z' -éèàëêùä]+/, contact.lastName, "Une majuscule puis majuscule ou minuscule avec espace, tiret ou apostrophe.") === false) {
+    if (validation("nomPasConforme", /^[A-Z][A-Za-z' -]{3,30}/, contact.lastName, "Une majuscule puis majuscule ou minuscule (sans accent) avec espace, tiret ou apostrophe.") === false) {
         donneeValide = false;
         };     
-    if (validation("adressePasConforme", /^[A-z0-9-'-\s]{2,100}$/, contact.address, "Veuillez renseigner votre adresse et respecter le format requis") === false) {
+    if (validation("adressePasConforme", /^[A-Za-z0-9-'-\s]{2,100}$/, contact.address, "Veuillez renseigner votre adresse et respecter le format requis") === false) {
         donneeValide = false;
         };     
-    if (validation("villePasConforme", /^[A-Z][A-z' -éèàëêùä]+/, contact.city, "Une majuscule puis majuscule ou minuscule avec espace, tiret ou apostrophe.") === false) {
+    if (validation("villePasConforme", /^[A-Z][A-Za-z' -]{3,30}/, contact.city, "Une majuscule puis majuscule ou minuscule (sans accent) avec espace, tiret ou apostrophe.") === false) {
         donneeValide = false;
         }; 
     if (validation("emailPasConforme", /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/, contact.email, "Veuillez renseigner votre email et respecter le format requis") === false) {
@@ -91,15 +91,15 @@ function confirmationCommande(event) {
     if (donneeValide === true) {         
         // Si toutes les donnÃ©es sont valides, stockage de l'objet "contact" dans le localStorage;         
         localStorage.setItem("Contact", JSON.stringify(contact));
-        localStorage.setItem("Produits", JSON.stringify(product_id));               
+        localStorage.setItem("Produits", JSON.stringify(products));               
         contact = JSON.parse(localStorage.getItem("Contact"));
         console.log(contact);
-        product_id = JSON.parse(localStorage.getItem("Produits"));
-        console.log(product_id);      
+        products = JSON.parse(localStorage.getItem("Produits"));
+        console.log(products);      
         //Création d'un objet commande         
         let commande = {
             contact, 
-            product_id
+            products
             }        
         //Appel de la fonction qui permet l'envoi de la commande        
         envoiDonnees(commande);     
@@ -113,7 +113,7 @@ function envoiDonnees(commande){
             'Accept': 'application/json', 
             'Content-Type': 'application/json' 
         },
-	    body: commande
+	    body: commande  
     })
     .then(function(res) {
         if (res.ok) {
