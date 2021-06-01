@@ -27,6 +27,7 @@ else{
     }
 }
 articlePanier += "<tr><td colspan=\"2\"><strong>Total : " + new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(total/100) + "</strong></td></table>";
+localStorage.setItem("Total", JSON.stringify(total));
 nouvelleDiv.innerHTML= articlePanier;
 
 //Bouton pour vider le panier
@@ -36,7 +37,7 @@ videPanier.addEventListener('click', function(event) {
     document.location.replace("panier.html");
 });
 
-//On écoute le clic sur le bouton passer commande
+//On écoute le clic sur le bouton "passer commande"
 let clicCommande = document.getElementById("commande");
 clicCommande.addEventListener('click', event => confirmationCommande(event), {
 });
@@ -73,16 +74,16 @@ function confirmationCommande(event) {
         city: document.getElementById('city').value,        
         email: document.getElementById('email').value    
         }   
-    if (validation("prenomPasConforme", /^[A-Z][A-Za-z' -]{3,30}/, contact.firstName, "Une majuscule puis majuscule ou minuscule (sans accent) avec espace, tiret ou apostrophe.") === false) {
+    if (validation("prenomPasConforme", /^[A-Z][A-Za-z' -]{2,30}$/, contact.firstName, "Une majuscule puis majuscule ou minuscule (sans accent) avec espace, tiret ou apostrophe.") === false) {
         donneeValide = false;     
         };     
-    if (validation("nomPasConforme", /^[A-Z][A-Za-z' -]{3,30}/, contact.lastName, "Une majuscule puis majuscule ou minuscule (sans accent) avec espace, tiret ou apostrophe.") === false) {
+    if (validation("nomPasConforme", /^[A-Z][A-Za-z' -]{2,30}$/, contact.lastName, "Une majuscule puis majuscule ou minuscule (sans accent) avec espace, tiret ou apostrophe.") === false) {
         donneeValide = false;
         };     
-    if (validation("adressePasConforme", /^[A-Za-z0-9-'-\s]{2,100}$/, contact.address, "Veuillez renseigner votre adresse et respecter le format requis") === false) {
+    if (validation("adressePasConforme", /^[A-Za-z0-9-'-\s]{2,100}$/, contact.address, "Veuillez renseigner votre adresse et respecter le format requis (aucune ponctuation)") === false) {
         donneeValide = false;
         };     
-    if (validation("villePasConforme", /^[A-Z][A-Za-z' -]{3,30}/, contact.city, "Une majuscule puis majuscule ou minuscule (sans accent) avec espace, tiret ou apostrophe.") === false) {
+    if (validation("villePasConforme", /^[A-Z][A-Za-z' -]{2,30}$/, contact.city, "Une majuscule puis majuscule ou minuscule (sans accent) avec espace, tiret ou apostrophe.") === false) {
         donneeValide = false;
         }; 
     if (validation("emailPasConforme", /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/, contact.email, "Veuillez renseigner votre email et respecter le format requis") === false) {
@@ -92,39 +93,6 @@ function confirmationCommande(event) {
         // Si toutes les donnÃ©es sont valides, stockage de l'objet "contact" dans le localStorage;         
         localStorage.setItem("Contact", JSON.stringify(contact));
         localStorage.setItem("Produits", JSON.stringify(products));               
-        contact = JSON.parse(localStorage.getItem("Contact"));
-        products = JSON.parse(localStorage.getItem("Produits"));
-        //Création d'un objet commande         
-        let commande = {
-            contact, 
-            products
-            }        
-        //Appel de la fonction qui permet l'envoi de la commande        
-        envoiDonnees(commande);     
+        //On lance la page de confirmation de commande
+        document.location.replace("resume.html");       
     }}
-
-function envoiDonnees(commande){
-    commande = JSON.stringify(commande);
-    fetch("http://localhost:3000/api/teddies/order", {
-	    method: "POST",
-	    headers: { 
-            'Accept': 'application/json', 
-            'Content-Type': 'application/json' 
-        },
-	    body: commande  
-    })
-    .then(function(res) {
-        if (res.ok) {
-          return res.json();
-        }
-      })
-    .then(function(resultat) {
-         /* document
-            .getElementById("result")
-            .innerText = value.postData.text;*/
-        for (let i in resultat) {
-            console.log(resultat[i]);
-            }
-    })
-    .catch(error => alert("Erreur : " + error));
-}
