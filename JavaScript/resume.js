@@ -8,9 +8,12 @@ let commande = {
     products
     }
 
-//Appel de la fonction qui permet l'envoi de la commande        
-envoiDonnees(commande); 
-
+//Appel de la fonction qui permet l'envoi de la commande seulsement si des données sont dans le localStorage     
+if (contact != null && products != null){
+    envoiDonnees(commande);
+}else{
+    document.location.replace("index.html");
+}
 
 /*--------FONCTIONS----------*/
 //Envoi de la requête POST
@@ -30,17 +33,13 @@ function envoiDonnees(commande){
         }
       })
     .then(function(resultat) {  
-         affichageReponse(resultat);
+        affichageReponse(resultat);
     })
-    .catch(error => alert("Erreur : " + error));
+    .catch(error => alert("Erreur : " + error));  
 }
-
 
 //On affiche le retour aux clients et on vide le localStorage
 function affichageReponse (resultat){
-    for (let i in resultat) {
-        console.log(i + " : " + resultat[i]);
-    }
     document
         .getElementById("h1")
         .innerHTML = "Merci " + resultat.contact.firstName + " " + resultat.contact.lastName;

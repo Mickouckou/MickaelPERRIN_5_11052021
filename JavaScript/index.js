@@ -11,6 +11,7 @@ fetch("http://localhost:3000/api/teddies")
     })
   .catch(error => alert("Erreur : " + error));
 
+/*--------FONCTIONS----------*/
 //Affichage des cartes produits sur la page Index du site
 function affichageCarte(tableau){
   const nouvelleDiv = document.createElement("div");
@@ -19,8 +20,3 @@ function affichageCarte(tableau){
   nouvelleDiv.classList.add("col-12", "col-md-6", "col-lg-4", "mt-3");
   nouvelleDiv.innerHTML="<div class=\"card cardIndex mb-4 mb-lg-0 border-primary shadow\"><img class=\"card-img-top\" src=\"" + tableau.imageUrl + "\" alt=\"Ours" + tableau.name + "><div class=\"card-body\"><h5 class=\"card-title\">" + tableau.name + " " + new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(tableau.price/100) + "</h5><p class=\"card-text\">" + tableau.description + "</p><a href=\"detail.html?id=" + tableau._id + "\" class=\"btn btn-primary stretched-link\">Détails Ours " + tableau.name + "</a></div></div>";
   }
-
-/*//Affiche correctement le prix renvoyé par l'API
-function affichagePrix (prix){
-  return prix /100 + " €";
-  }*/  

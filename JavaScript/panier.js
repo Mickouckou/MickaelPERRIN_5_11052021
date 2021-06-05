@@ -27,22 +27,24 @@ else{
     }
 }
 articlePanier += "<tr><td colspan=\"2\"><strong>Total : " + new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(total/100) + "</strong></td></table>";
-localStorage.setItem("Total", JSON.stringify(total));
 nouvelleDiv.innerHTML= articlePanier;
 
-//Bouton pour vider le panier
+
+//On écoute le clic sur le bouton pour vider le panier
 let videPanier = document.getElementById("videPanier");
-videPanier.addEventListener('click', function(event) {
-    localStorage.clear();
-    document.location.replace("panier.html");
-});
+videPanier.addEventListener('click', event => viderPanier());
 
 //On écoute le clic sur le bouton "passer commande"
 let clicCommande = document.getElementById("commande");
-clicCommande.addEventListener('click', event => confirmationCommande(event), {
-});
+clicCommande.addEventListener('click', event => confirmationCommande(event));
 
 /*--------FONCTIONS----------*/
+//Vide le panier et recharge la page
+function viderPanier(){
+    localStorage.clear();
+    document.location.replace("panier.html");
+}
+
 //Désactive les boutons
 function desactiver(element){
     let boutonDesactive = document.getElementById(element);
@@ -50,15 +52,15 @@ function desactiver(element){
 }
 
 //Validation des données
-function validation(inputId, regex, inputName, message){
-    let inputMessage = document.getElementById(inputId);
+function validation(idValeur, regex, contenuValeur, message){
+    let valeurMessage = document.getElementById(idValeur);
     //On teste si la donnée est vide ou si le regex est respecté
-    if (inputName === "" || regex.test(inputName) === false) {
-        inputMessage.innerHTML = message;
+    if (contenuValeur === "" || regex.test(contenuValeur) === false) {
+        valeurMessage.innerHTML = message;
         return false;
     //Si la donnée est remplie et respecte le regex    
     } else {
-        inputMessage.innerHTML = "ok";
+        valeurMessage.innerHTML = "ok";
     }
 }
 
@@ -90,7 +92,8 @@ function confirmationCommande(event) {
         donneeValide = false;
         };
     if (donneeValide === true) {         
-        // Si toutes les donnÃ©es sont valides, stockage de l'objet "contact" dans le localStorage;         
+        // Si toutes les données sont valides, stockage des objets "contact" et "produits" dans le localStorage;         
+        localStorage.setItem("Total", JSON.stringify(total));
         localStorage.setItem("Contact", JSON.stringify(contact));
         localStorage.setItem("Produits", JSON.stringify(products));               
         //On lance la page de confirmation de commande
