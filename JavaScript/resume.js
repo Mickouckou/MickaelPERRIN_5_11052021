@@ -8,7 +8,7 @@ let commande = {
     products
     }
 
-//Appel de la fonction qui permet l'envoi de la commande seulsement si des données sont dans le localStorage     
+//Appel de la fonction qui permet l'envoi de la commande seulement si des données sont dans le localStorage     
 if (contact != null && products != null){
     envoiDonnees(commande);
 }else{
@@ -41,7 +41,7 @@ function envoiDonnees(commande){
 //On affiche le retour aux clients et on vide le localStorage
 function affichageReponse (resultat){
     document
-        .getElementById("h1")
+        .getElementById("h1resume")
         .innerHTML = "Merci " + resultat.contact.firstName + " " + resultat.contact.lastName;
 
     let affichageResultat = "<p>Votre commande de <strong>";

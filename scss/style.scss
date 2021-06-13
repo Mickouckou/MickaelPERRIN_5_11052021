@@ -44,9 +44,13 @@ ul{
     margin: auto;
 }
 
-#h1{
+#h1, #h1resume{
     width:100%;
     text-align: center;
+}
+
+#h1resume{
+    margin-top: 150px;
 }
 
 #detailOurs{
@@ -64,6 +68,10 @@ tr {
 
 button{
     margin-top: 15px;
+}
+
+#resume{
+    margin: 100px 0 300px 0;
 }
 
 .footer{
