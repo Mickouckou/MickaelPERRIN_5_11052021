@@ -29,6 +29,9 @@ else{
 articlePanier += "<tr><td colspan=\"2\"><strong>Total : " + new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(total/100) + "</strong></td></table>";
 nouvelleDiv.innerHTML= articlePanier;
 
+//On écoute le clic sur le bouton "poursuivre les achats"
+let continueAchat = document.getElementById("poursuivreAchat");
+continueAchat.addEventListener('click', event => poursuivreAchat());
 
 //On écoute le clic sur le bouton pour vider le panier
 let videPanier = document.getElementById("videPanier");
@@ -39,6 +42,11 @@ let clicCommande = document.getElementById("commande");
 clicCommande.addEventListener('click', event => confirmationCommande(event));
 
 /*--------FONCTIONS----------*/
+//Poursuivre les achats
+function poursuivreAchat(){
+    document.location.replace("index.html");
+}
+
 //Vide le panier et recharge la page
 function viderPanier(){
     localStorage.clear();
